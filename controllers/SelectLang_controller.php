@@ -14,11 +14,8 @@ class SelectLang_controller extends Controller
         if ($this->telegram->getUpdateType() == 'callback_query') {
             $data = $this->telegram->Callback_Data();
             if ($data == "uzl" or $data == "uzk" or $data == "rus") {
-                if ($this->users_model->if_not_exist($this->chat_id)) {
-                    var_dump($this->users_model->set($this->chat_id, $this->telegram->FirstName().' '.$this->telegram->LastName(), $data));
-                } else {
-                    var_dump($this->users_model->update($this->chat_id, "lang", $data));
-                }
+
+                $this->users_model->set($this->chat_id, base64_encode($this->telegram->FirstName().' '.$this->telegram->LastName()), $data);
 
                 $this->telegram->deleteMessage([
                     'chat_id' => $this->chat_id,
